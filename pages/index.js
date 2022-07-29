@@ -1,71 +1,222 @@
-import Head from 'next/head'
-import Image from 'next/image'
-
-// bg-violet-500 sm:bg-red-500 md:bg-blue-600 lg:bg-yellow-500 xl:bg-lime-500 2xl:bg-pink-500
-
-import React, { useEffect, useState } from "react";
-import abi from "../utils/MoonMessage.json"
-import MoonMessage from '../artifacts/contracts/MoonMessage.sol/MoonMessage.json'
+import abi from "../utils/MoonMessage.json";
 import { ethers } from "ethers";
-
+import Head from "next/head";
+import React, { useEffect, useState } from "react";
 
 export default function Home() {
+  // // Contract addres and ABI
+  // const contractAddress = "0xeeB73293Ee03e6D2E65b240521b64280458b08e2";
+  // const contractABI = abi.abi;
 
-  // Contract addres and ABI
+  // // Component State
+  // const [currentAccount, setCurrentAccount] = useState("");
+  // const [name, setName] = useState("");
+  // const [message, setMessage] = useState("");
+  // const [memos, setMemos] = useState([]);
+
+  // const onNameChange = (event) => {
+  //   setName(event.target.value);
+  // };
+
+  // const onMessageChange = (event) => {
+  //   setMessage(event.target.value);
+  // };
+
+  // // Wallet connection logic
+
+  // const isWalletConnected = async () => {
+  //   try {
+  //     const { ethereum } = window;
+
+  //     const accounts = await ethereum.request({ method: "eth_accounts" });
+  //     console.log("accounts:", accounts);
+
+  //     if (accounts.length > 0) {
+  //       const account = accounts[0];
+  //       console.log("wallet is connected!" + account);
+  //     } else {
+  //       console.log("make sure MetaMask is connected");
+  //     }
+  //   } catch (error) {
+  //     console.log("error:", error);
+  //   }
+  // };
+
+  // const connectWallet = async () => {
+  //   try {
+  //     const { ethereum } = window;
+
+  //     if (!ethereum) {
+  //       console.log("please install MetaMask");
+  //     }
+
+  //     const accounts = await ethereum.request({
+  //       method: "eth_requestAccounts",
+  //     });
+  //     setCurrentAccount(accounts[0]);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const sendToMoon = async () => {
+  //   try {
+  //     const { ethereum } = window;
+
+  //     if (ethereum) {
+  //       const provider = new ethers.providers.Web3Provider(ethereum, "any");
+  //       const signer = provider.getSigner();
+  //       const moonMessage = new ethers.Contract(
+  //         contractAddress,
+  //         contractABI,
+  //         signer
+  //       );
+
+  //       console.log("sending eth...");
+  //       const moonTxn = await moonMessage.sendToMoon(
+  //         name ? name : " anon",
+  //         message ? message : "Go moon!",
+  //         { value: ethers.utils.parseEther("0.001") }
+  //       );
+
+  //       await moonTxn.wait();
+
+  //       console.log("mined", moonTxn.hash);
+
+  //       console.log("send it to moon");
+
+  //       // Clear the form fields
+  //       setName("");
+  //       setMessage("");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // // Function the fetch all memos stored on-chain
+
+  // const getMemos = async () => {
+  //   try {
+  //     const { ethereum } = window;
+  //     if (ethereum) {
+  //       const provider = new ethers.providers.Web3Provider(ethereum);
+  //       const signer = provider.getSigner();
+  //       const moonMessage = new ethers.Contract(
+  //         contractAddress,
+  //         contractABI,
+  //         signer
+  //       );
+
+  //       console.log("fetching memos from the blockchain..");
+  //       const memos = await moonMessage.getMemos();
+  //       console.log("fetched!");
+  //       setMemos(memos);
+  //     } else {
+  //       console.log("Metamask is not connected");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   let moonMessage;
+  //   isWalletConnected();
+  //   getMemos();
+
+  //   // Create an event handler function for when someone send new memo
+
+  //   const onNewMemo = (from, timestamp, name, message) => {
+  //     console.log("Memo received: ", from, timestamp, name, message);
+  //     setMemos((prevState) => [
+  //       ...prevState,
+  //       {
+  //         address: from,
+  //         timestamp: new Date(timestamp * 1000),
+  //         message,
+  //         name,
+  //       },
+  //     ]);
+  //   };
+
+  //   const { ethereum } = window;
+
+  //   // Listen for new memo events
+  //   if (ethereum) {
+  //     const provider = new ethers.providers.Web3Provider(ethereum, "any");
+  //     const signer = provider.getSigner();
+  //     const moonMessage = new ethers.Contract(
+  //       contractAddress,
+  //       contractABI,
+  //       signer
+  //     );
+
+  //     moonMessage.on("NewMemo", onNewMemo);
+  //   }
+  //   return () => {
+  //     if (moonMessage) {
+  //       moonMessage.off("NewMemo", onNewMemo);
+  //     }
+  //   };
+  // }, []);
+
+  // Contract Address & ABI
   const contractAddress = "0xeeB73293Ee03e6D2E65b240521b64280458b08e2";
   const contractABI = abi.abi;
 
-  // Component State
+  // Component state
   const [currentAccount, setCurrentAccount] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [memos, setMemos] = useState([]);
 
-  const onNameChange = (event) => {
-    setName(event.target.value);
-  }
+  // const onNameChange = (event) => {
+  //   setName(event.target.value);
+  // };
 
-  const onMessageChange = (event) => {
-    setMessage(event.target.value);
-  }
+  // const onMessageChange = (event) => {
+  //   setMessage(event.target.value);
+  // };
+
+ 
 
   // Wallet connection logic
-
   const isWalletConnected = async () => {
     try {
       const { ethereum } = window;
 
-      const accounts = await ethereum.request({ method: 'eth_accounts' })
-      console.log("accounts:", accounts);
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+      console.log("accounts: ", accounts);
 
       if (accounts.length > 0) {
         const account = accounts[0];
-        console.log("wallet is connected!" + account);
+        console.log("wallet is connected! " + account);
       } else {
         console.log("make sure MetaMask is connected");
       }
     } catch (error) {
-      console.log("error:", error);
+      console.log("error: ", error);
     }
-  }
+  };
 
   const connectWallet = async () => {
     try {
       const { ethereum } = window;
 
       if (!ethereum) {
-        console.log("please install Metamask");
+        console.log("please install MetaMask");
       }
 
       const accounts = await ethereum.request({
-        method: 'eth_requestAccounts'
+        method: "eth_requestAccounts",
       });
+
       setCurrentAccount(accounts[0]);
     } catch (error) {
       console.log(error);
     }
-  }
-
+  };
 
   const sendToMoon = async () => {
     try {
@@ -75,23 +226,25 @@ export default function Home() {
         const provider = new ethers.providers.Web3Provider(ethereum, "any");
         const signer = provider.getSigner();
         const moonMessage = new ethers.Contract(
-          contractAddress, contractABI, signer
+          contractAddress,
+          contractABI,
+          signer
         );
 
-        console.log("sending eth...")
+        console.log("buying coffee..");
         const moonTxn = await moonMessage.sendToMoon(
-          name ? name : " anon",
-          message ? message : "Go moon!",
+          name ? name : "anon",
+          message ? message : "Enjoy!",
           { value: ethers.utils.parseEther("0.001") }
         );
 
         await moonTxn.wait();
 
-        console.log("mined", moonTxn.hash);
+        console.log("mined ", moonTxn.hash);
 
-        console.log("send it to moon");
+        console.log(" purchased!");
 
-        // Clear the form fields
+        // Clear the form fields.
         setName("");
         setMessage("");
       }
@@ -100,8 +253,7 @@ export default function Home() {
     }
   };
 
-  // Function the fetch all memos stored on-chain
-
+  // Function to fetch all memos stored on-chain.
   const getMemos = async () => {
     try {
       const { ethereum } = window;
@@ -109,7 +261,9 @@ export default function Home() {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const moonMessage = new ethers.Contract(
-          contractAddress, contractABI, signer
+          contractAddress,
+          contractABI,
+          signer
         );
 
         console.log("fetching memos from the blockchain..");
@@ -129,8 +283,8 @@ export default function Home() {
     isWalletConnected();
     getMemos();
 
-    // Create an event handler function for when someone send new memo
-
+    // Create an event handler function for when someone sends
+    // us a new memo.
     const onNewMemo = (from, timestamp, name, message) => {
       console.log("Memo received: ", from, timestamp, name, message);
       setMemos((prevState) => [
@@ -139,67 +293,76 @@ export default function Home() {
           address: from,
           timestamp: new Date(timestamp * 1000),
           message,
-          name
-        }
+          name,
+        },
       ]);
     };
 
     const { ethereum } = window;
 
-    // Listen for new memo events
+    // Listen for new memo events.
     if (ethereum) {
       const provider = new ethers.providers.Web3Provider(ethereum, "any");
       const signer = provider.getSigner();
-      const moonMessage = new ethers.Contract(
-        contractAddress, contractABI, signer
-      );
+      moonMessage = new ethers.Contract(contractAddress, contractABI, signer);
 
       moonMessage.on("NewMemo", onNewMemo);
     }
+
     return () => {
       if (moonMessage) {
         moonMessage.off("NewMemo", onNewMemo);
       }
-    }
+    };
   }, []);
 
   return (
-    <div className="bg-star bg-cover">
+    <div className="bg-star bg-cover flex flex-col min-w-full overflow-x-hidden ">
       <Head>
         <title>Moon Message</title>
         <meta name="description" content="Send your message to the moon!" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className='flex min-h-screen'>
-        <div className='mt-10 flex justify-center w-full'>
-
-
+      <div className="flex min-h-screen">
+        <div className="mt-10 flex justify-center w-full">
           {currentAccount ? (
-            <div className='flex justify-center text-center'>
+            <div className="flex justify-center text-center">
               <form>
-                <div className='mt-20'>
-                  <p className='text-white text-4xl mb-20'> Send a Message for 0.001ETH</p>
-                  <label className='text-white'>Name</label><br />
-                  <input id='name' type="text" onChange={onNameChange} required className="bg-opacity-0 bg-black border border-blue-500 text-gray-200 mt-4" />
-
+                <div className="mt-20">
+                  <p className="text-white text-4xl mb-20">
+                    {" "}
+                    Send a Message for 0.001 ETH
+                  </p>
+                  <label className="text-white">Name</label>
+                  <br />
+                  <input
+                    id="name"
+                    type="text"
+                    onChange={event => setName(event.target.value)}
+                    required
+                    className="bg-opacity-0 bg-black border border-blue-500 text-gray-200 mt-4 md:w-60 px-4 py-2 text-center"
+                  />
                 </div>
                 <br />
                 <div>
-                  <label className='text-white'>
-                    Message
-                  </label><br />
+                  <label className="text-white">Message</label>
+                  <br />
 
                   <textarea
                     rows={3}
                     id="message"
-                    onChange={onMessageChange}
+                    onChange={event => setMessage(event.target.value)}
                     required
-                    className='bg-opacity-0 bg-black border border-purple-500 text-gray-200 mt-4'
+                    className="bg-opacity-0 bg-black border border-purple-500 text-gray-200 mt-4 p-2 md:w-60 lg:w-72 xl:h-52 2xl:p-4 2xl:h-72 2xl:w-[480px] text-center"
                   ></textarea>
                 </div>
-                <div className='pt-10'>
-                  <button onClick={sendToMoon} className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                <div className="pt-10">
+                  <button
+                    type="button"
+                    onClick={sendToMoon}
+                    className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
+                  >
                     <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-gray-900 rounded-md group-hover:bg-opacity-0">
                       Send to the Moon!
                     </span>
@@ -209,28 +372,42 @@ export default function Home() {
             </div>
           ) : (
             <div>
-              <p className='text-white text-5xl  uppercase font-extralight tracking-[.8em] text-center leading-normal'>Moon Message</p>
+              <p className="text-white text-2xl sm:text-5xl uppercase font-extralight tracking-[.8em] text-center leading-normal">
+                Moon Message
+              </p>
               {/* <div className='mt-40 animate-[spin_30s_linear_infinite]'>
 
                 <img src='/monkeyastronaut.png' className='h-80'></img>
               </div> */}
-              <div className='mt-40 flex'>
-                <img src='/monkeyastronaut.png' className='h-60 lg:h-80 mt-32 animate-turning ml-8'></img>
-                <img src='/moon.png' className='h-60 sm:h-72 md:h-[380px] lg:h-[480px] top-48 ml-52 sm:ml-80  lg:ml-[400px] absolute animate-[spin_260s_linear_infinite]'></img>
+              <div className="mt-40 flex">
+                <img
+                  src="/monkeyastronaut.png"
+                  className="h-48 dortyuz:mt-52  sm:h-60 md:h-72 lg:h-80 mt-32 animate-turning ml-8 sm:left-20 xl:ml-0"
+                ></img>
+                <img
+                  src="/moon.png"
+                  className="h-40 sm:h-80 lg:h-[480px] right-10 top-48 md:right-20 lg:right-28 2xl:right-80 2xl:h-[550px] absolute animate-[spin_260s_linear_infinite]"
+                ></img>
               </div>
-              <div className='text-white mt-20 flex justify-center text-center tracking-wider font-extralight'>
-                <p>Maybe ethereum isn't on the moon yet. But your message can be. <br />Let's send your message to the Moon! </p>
+              <div className="text-white mt-20 px-2 flex justify-center text-center tracking-wider font-extralight">
+                <p>
+                  Maybe ethereum isn't on the moon yet. <br />
+                  But your message can be. <br />
+                  Let's send your message to the Moon!{" "}
+                </p>
               </div>
 
-              <div className='mt-32 flex justify-center'>
-                <button onClick={connectWallet} className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+              <div className="mt-16 sm:mt-32 flex justify-center">
+                <button
+                  onClick={connectWallet}
+                  className="relative inline-flex items-center justify-center p-0.5 mb-16 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
+                >
                   <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-[#151515] rounded-md group-hover:bg-opacity-0">
                     Connect Your Wallet
                   </span>
                 </button>
               </div>
             </div>
-
           )}
         </div>
         {/* {currentAccount && (<h1>Memos received</h1>)}
@@ -243,8 +420,8 @@ export default function Home() {
             </div>
           )
         }))} */}
-
       </div>
     </div>
-  )
+  );
 }
+

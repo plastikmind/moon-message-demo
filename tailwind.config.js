@@ -6,15 +6,15 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'poppins': ["Poppins", 'sans-serif'],
-        'antic': ['Antic', 'sans-serif'],
+        poppins: ["Poppins", "sans-serif"],
+        antic: ["Antic", "sans-serif"],
       },
       backgroundImage: {
-        'star': "url('../public/star-background.jpg')"
+        star: "url('../public/star-background.jpg')",
       },
       animation: {
-        turning: 'turning 2s infinite',
-        moonturning: 'moonturning 2s infinite',
+        turning: "turning 2s infinite",
+        moonturning: "moonturning 2s infinite",
       },
       keyframes: {
         turning: {
@@ -25,8 +25,8 @@ module.exports = {
             transform: "rotate(2deg)",
           },
           "100%": {
-            transform: "rotate(0deg)"
-          }
+            transform: "rotate(0deg)",
+          },
         },
         moonturning: {
           "0%": {
@@ -36,11 +36,18 @@ module.exports = {
             transform: "rotate(1deg)",
           },
           "100%": {
-            transform: "rotate(0deg)"
-          }
-        }
+            transform: "rotate(0deg)",
+          },
+        },
       },
-    },
+      screens: {
+      
+        "dortyuz": "400px",
+        "ucyuzon": "310px",
+        
+      },
+    }
   },
   plugins: [],
-}
+};
+
