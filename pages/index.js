@@ -372,7 +372,7 @@ export default function Home() {
             </div>
           ) : (
             <div>
-              <p className="text-white text-2xl sm:text-5xl uppercase font-extralight tracking-[.8em] text-center leading-normal">
+              <p className="text-white text-2xl sm:text-5xl uppercase font-extralight tracking-[.8em] text-center leading-normal lg:pt-10">
                 Moon Message
               </p>
               {/* <div className='mt-40 animate-[spin_30s_linear_infinite]'>
@@ -386,10 +386,10 @@ export default function Home() {
                 ></img>
                 <img
                   src="/moon.png"
-                  className="h-40 sm:h-80 lg:h-[480px] right-10 top-48 md:right-20 lg:right-28 2xl:right-80 2xl:h-[550px] absolute animate-[spin_260s_linear_infinite]"
+                  className="h-48 sm:h-80 lg:h-[480px] right-8 top-48 md:right-20 lg:right-28 2xl:right-80 2xl:h-[550px] absolute animate-[spin_260s_linear_infinite]"
                 ></img>
               </div>
-              <div className="text-white mt-20 px-2 flex justify-center text-center tracking-wider font-extralight">
+              <div className="text-white mt-20 px-2 flex justify-center text-center tracking-wider font-extralight lg:text-xl">
                 <p>
                   Maybe ethereum isn't on the moon yet. <br />
                   But your message can be. <br />
@@ -397,7 +397,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="mt-16 sm:mt-32 flex justify-center">
+              <div className="mt-12 flex justify-center">
                 <button
                   onClick={connectWallet}
                   className="relative inline-flex items-center justify-center p-0.5 mb-16 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
