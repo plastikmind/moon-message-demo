@@ -41,13 +41,10 @@ module.exports = {
         },
       },
       screens: {
-      
-        "dortyuz": "400px",
-        "ucyuzon": "310px",
-        
+        dortyuz: "400px",
+        ucyuzon: "310px",
       },
-    }
+    },
   },
   plugins: [],
 };
-
