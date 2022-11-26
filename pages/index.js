@@ -8,20 +8,28 @@ export default function Home() {
   const contractAddress = "0xeeB73293Ee03e6D2E65b240521b64280458b08e2";
   const contractABI = abi.abi;
 
-  const chainId = "0x5";
-  const chainName = "Goerli test network";
-  const rpcUrls = "https://rpc.goerli.mudit.blog/";
-  const blockExplorerUrls = "https://goerli.etherscan.io";
-  const currencyName = "Görli Ether";
-  const currencySymbol = "ETH";
+  // const chainId = "0x5";
+  // const chainName = "Goerli test network";
+  // const rpcUrls = "https://rpc.goerli.mudit.blog/";
+  // const blockExplorerUrls = "https://goerli.etherscan.io";
+  // const currencyName = "Görli Ether";
+  // const currencySymbol = "ETH";
 
   // Component state
   const [currentAccount, setCurrentAccount] = useState("");
-  const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
   const [memos, setMemos] = useState([]);
   const [isSent, setIsSent] = useState(false);
   const [ether, setEther] = useState(true);
+  // Form state
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+
+  // Setting success or failure messages states
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showFailureMessage, setShowFailureMessage] = useState(false);
+
+  //   Setting button text on form submission
+  const [buttonText, setButtonText] = useState("Send to the Moon!");
 
   // Wallet connection logic
   const isWalletConnected = async (ethereum) => {
@@ -83,6 +91,7 @@ export default function Home() {
           signer
         );
 
+        setButtonText("Sending...");
         console.log("buying coffee..");
         const moonTxn = await moonMessage.sendToMoon(
           name ? name : "anon",
@@ -92,15 +101,20 @@ export default function Home() {
 
         await moonTxn.wait();
 
-        console.log("mined ", moonTxn.hash);
-
-        console.log(" purchased!");
-
-        // Clear the form fields.
         setName("");
         setMessage("");
+
+        console.log("mined ", moonTxn.hash);
+        console.log(" purchased!");
+
+        setShowSuccessMessage(true);
+        setShowFailureMessage(false);
+        setButtonText("Send to the Moon!");
       }
     } catch (error) {
+      setShowFailureMessage(true);
+      setShowSuccessMessage(false);
+      setButtonText("Send to the Moon!");
       console.log(error);
     }
   };
@@ -130,13 +144,21 @@ export default function Home() {
     }
   };
 
+  const handleSubmit = (e) => {
+    try {
+      e.preventDefault();
+      setIsSent((current) => !current);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     let moonMessage;
     isWalletConnected();
     getMemos();
 
-    // Create an event handler function for when someone sends
-    // us a new memo.
+    //  an event handler function for when someone sends us a new memo.
     const onNewMemo = (from, timestamp, name, message) => {
       console.log("Memo received: ", from, timestamp, name, message);
       setMemos((prevState) => [
@@ -179,12 +201,24 @@ export default function Home() {
         <div className="mt-10 flex justify-center w-full">
           {currentAccount ? (
             <div className="flex justify-center text-center">
-              <form onSubmit={() => setIsSent((current) => !current)}>
-                <div className="mt-20">
-                  <p className="text-white text-4xl mb-20">
+              <form onSubmit={handleSubmit}>
+                <div className="pt-4 sm:mt-20">
+                  <p className="text-white text-2xl sm:text-4xl mb-12">
                     Send a Message <br />{" "}
-                    <span className="text-2xl">0.001 ETH</span>
+                    <span className="text-xl sm:text-2xl">0.001 ETH</span>
                   </p>
+                  <div className="mb-4">
+                    {showSuccessMessage && (
+                      <p className="text-green-500 font-semibold text-sm my-2">
+                        Thank you! Your Message has been delivered.
+                      </p>
+                    )}
+                    {showFailureMessage && (
+                      <p className="text-red-500">
+                        Oops! Something went wrong, please try again.
+                      </p>
+                    )}
+                  </div>
                   <label className="text-white">Name</label>
                   <br />
                   <input
@@ -193,6 +227,7 @@ export default function Home() {
                     onChange={(event) => setName(event.target.value)}
                     required
                     className="bg-opacity-0 bg-black border border-blue-500 text-gray-200 mt-4 md:w-60 px-4 py-2 text-center"
+                    value={name}
                   />
                 </div>
                 <br />
@@ -206,6 +241,7 @@ export default function Home() {
                     onChange={(event) => setMessage(event.target.value)}
                     required
                     className="bg-opacity-0 bg-black border border-purple-500 text-gray-200 mt-4 p-2 md:w-60 lg:w-72 xl:h-52 2xl:p-4 2xl:h-72 2xl:w-[480px] text-center"
+                    value={message}
                   ></textarea>
                 </div>
                 <div className="pt-10">
@@ -215,7 +251,7 @@ export default function Home() {
                     className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
                   >
                     <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                      Send to the Moon!
+                      {buttonText}
                     </span>
                   </button>
                 </div>
@@ -223,13 +259,13 @@ export default function Home() {
             </div>
           ) : (
             <div>
-              <p className="text-white text-2xl sm:text-5xl uppercase font-extralight tracking-[.5em] sm:tracking-[.8em] text-center leading-normal lg:pt-10">
+              <p className="text-white text-2xl sm:text-5xl uppercase font-extralight tracking-[.5em] sm:tracking-[.8em] text-center leading-normal lg:pt-10 px-2">
                 Moon Message
               </p>
               {/* <div className='mt-40 animate-[spin_30s_linear_infinite]'>
-
-                <img src='/monkeyastronaut.png' className='h-80'></img>
-              </div> */}
+      
+                      <img src='/monkeyastronaut.png' className='h-80'></img>
+                    </div> */}
               <div className="mt-40 flex">
                 <img
                   src="/monkeyastronaut.png"
@@ -237,10 +273,10 @@ export default function Home() {
                 ></img>
                 <img
                   src="/moon.png"
-                  className="h-48 sm:h-80 lg:h-[480px] right-8 top-48 md:right-20 lg:right-28 2xl:right-80 2xl:h-[550px] absolute animate-[spin_260s_linear_infinite]"
+                  className="h-48 sm:h-80 lg:h-[480px] right-8 top-40 md:right-20 lg:right-28 2xl:right-80 2xl:h-[550px] absolute animate-[spin_260s_linear_infinite]"
                 ></img>
               </div>
-              <div className="text-white mt-20 px-2 flex justify-center text-center tracking-wider font-extralight lg:text-xl">
+              <div className="text-white mt-20 px-2 flex justify-center text-center tracking-wider font-extralight text-[14px] sm:text-lg  lg:text-xl">
                 <p>
                   Maybe ethereum isn't on the moon yet. <br />
                   But your message can be. <br />
@@ -249,15 +285,15 @@ export default function Home() {
               </div>
 
               {/* <div className="mt-12 flex justify-center">
-                <button
-                  onClick={connectWallet}
-                  className="relative inline-flex items-center justify-center p-0.5 mb-16 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
-                >
-                  <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-[#151515] rounded-md group-hover:bg-opacity-0">
-                    Connect Your Wallet
-                  </span>
-                </button>
-              </div> */}
+                      <button
+                        onClick={connectWallet}
+                        className="relative inline-flex items-center justify-center p-0.5 mb-16 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
+                      >
+                        <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-[#151515] rounded-md group-hover:bg-opacity-0">
+                          Connect Your Wallet
+                        </span>
+                      </button>
+                    </div> */}
 
               {ether ? (
                 <div className="mt-12 flex justify-center">
