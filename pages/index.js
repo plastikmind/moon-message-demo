@@ -92,7 +92,7 @@ export default function Home() {
         );
 
         setButtonText("Sending...");
-        console.log("buying coffee..");
+       // console.log("buying...");
         const moonTxn = await moonMessage.sendToMoon(
           name ? name : "anon",
           message ? message : "Enjoy!",
@@ -104,8 +104,8 @@ export default function Home() {
         setName("");
         setMessage("");
 
-        console.log("mined ", moonTxn.hash);
-        console.log(" purchased!");
+        //console.log("mined ", moonTxn.hash);
+        //console.log(" purchased!");
 
         setShowSuccessMessage(true);
         setShowFailureMessage(false);
@@ -115,7 +115,7 @@ export default function Home() {
       setShowFailureMessage(true);
       setShowSuccessMessage(false);
       setButtonText("Send to the Moon!");
-      console.log(error);
+      //console.log(error);
     }
   };
 
